@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Campus Remarket</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --board: #F4F6F3;
+  --shadow: 0 1px 2px #17203A14, 0 6px 18px -8px #17203A22;
+  --shadow-hi: 0 2px 4px #17203A14, 0 16px 32px -12px #17203A40;
+  --paper: #FFFFFF;
+  --ink: #17203A;
+  --mute: #5B6479;
+  --line: #DDE2DB;
+
+  --sell: #17766F;
+  --rent: #F4BC2B;
+  --swap: #E4573D;
+  --accent: #17203A;
+  --ok-bg: #DDF0E6;
+  --ok: #14583F;
+  --err-bg: #FBE0DA;
+  --err: #8E2A18;
+  --warn-bg: #FFF0C2;
+  --warn: #6B4E00;
+
+  --display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Instrument Sans', 'Segoe UI', system-ui, sans-serif
+}
+
+* {
+  box-sizing: border-box
+}
+
+[hidden] {
+  display: none !important
+}
+
+html {
+  -webkit-text-size-adjust: 100%
+}
+
+body {
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+  background: var(--board);
+  color: var(--ink);
+  margin: 0;
+  min-height: 100vh
+}
+
+h1, h2, h3 {
+  font-family: var(--display);
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -.01em
+}
+
+p {
+  margin: 0
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 6px
+}
+
+/* top bar */
+header {
+  background: var(--ink);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  box-shadow: 0 1px 0 #ffffff14
+}
+
+.bar {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap
+}
+
+.brand {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.brand i {
+  width: 26px;
+  height: 26px;
+  border-radius: 50% 50% 50% 4px;
+  background: var(--rent);
+  display: inline-block;
+  position: relative
+}
+
+.brand i::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  top: 6px;
+  left: 9px
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+  align-items: center
+}
+
+nav button {
+  background: transparent;
+  border: 0;
+  color: #C9CFE0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 500
+}
+
+nav button:hover {
+  background: #ffffff18;
+  color: #fff
+}
+
+nav button.on {
+  background: #fff;
+  color: var(--ink)
+}
+
+nav .who {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #C9CFE0;
+  font-size: 14px
+}
+
+nav .who b {
+  color: #fff;
+  font-weight: 600
+}
+
+nav .who .role {
+  background: #ffffff1f;
+  border-radius: 999px;
+  padding: 1px 10px;
+  font-size: 13px
+}
+
+nav .who button {
+  border: 1px solid #ffffff44;
+  color: #fff
+}
+
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 20px 64px
+}
+
+/* controls */
+button {
+  font: inherit;
+  padding: 9px 16px;
+  border: 1px solid #C3CABF;
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .12s, background .12s
+}
+
+button:hover {
+  background: #E6EAF2
+}
+
+button:active {
+  transform: translateY(1px)
+}
+
+button.pri {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: 0 1px 2px #17203A40
+}
+
+button.pri:hover {
+  background: #2B3760
+}
+
+button.del {
+  border-color: #C9503A;
+  color: #A1331F
+}
+
+button.del:hover {
+  background: var(--err-bg)
+}
+
+button.sm {
+  padding: 4px 11px;
+  font-size: 13px;
+  border-width: 1px
+}
+
+input, select {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid #C3CABF;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  max-width: 100%
+}
+
+input:focus, select:focus {
+  border-color: var(--ink);
+  outline: 0;
+  box-shadow: 0 0 0 3px #F4BC2B88
+}
+
+input::placeholder {
+  color: #8B93A6
+}
+
+label {
+  font-size: 14px;
+  color: var(--mute)
+}
+
+/* toast */
+#msg {
+  position: fixed;
+  left: 50%;
+  top: 76px;
+  transform: translateX(-50%);
+  z-index: 20;
+  max-width: min(560px, 92vw);
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 8px 28px #17203A33;
+  animation: pop .25s ease-out
+}
+
+#msg:empty {
+  display: none
+}
+
+.ok {
+  background: var(--ok-bg);
+  color: var(--ok)
+}
+
+.err {
+  background: var(--err-bg);
+  color: var(--err)
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px)
+  }
+}
+
+/* page heads */
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px
+}
+
+.head h2 {
+  font-size: 34px;
+  font-weight: 800
+}
+
+.head p {
+  color: var(--mute);
+  margin-top: 4px
+}
+
+section.blk {
+  margin-top: 40px
+}
+
+section.blk > .head h2 {
+  font-size: 24px
+}
+
+/* browse toolbar */
+.hero {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 20px;
+  padding: 34px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  top: -70px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: var(--rent);
+  opacity: .95
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  right: 120px;
+  bottom: -90px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: var(--swap)
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1
+}
+
+.hero h2 {
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 800;
+  max-width: 14em
+}
+
+.hero p {
+  color: #C9CFE0;
+  margin-top: 8px;
+  max-width: 30em
+}
+
+.hero form {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap
+}
+
+.hero input {
+  flex: 1 1 260px;
+  min-width: 0;
+  border: 0;
+  padding: 13px 16px;
+  font-size: 16px
+}
+
+.hero button {
+  padding: 13px 22px;
+  background: var(--rent);
+  color: var(--ink);
+  border-color: var(--rent)
+}
+
+.hero-copy {
+  max-width: 560px
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin: 22px 0 4px
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 6px 15px;
+  font-weight: 500;
+  background: var(--paper);
+  border-color: var(--line);
+  font-size: 14px
+}
+
+.chip.on {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink)
+}
+
+.seg {
+  display: inline-flex;
+  background: #E4E9E1;
+  border-radius: 11px;
+  padding: 3px
+}
+
+.seg button {
+  border: 0;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500
+}
+
+.seg button.on {
+  background: var(--paper);
+  box-shadow: 0 1px 3px #17203A26;
+  font-weight: 600
+}
+
+.filters select {
+  padding: 8px 12px;
+  font-size: 14px
+}
+
+.count {
+  color: var(--mute);
+  font-size: 14px;
+  margin-top: 14px
+}
+
+.demo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--mute);
+  margin-top: 12px
+}
+
+.demo input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ink)
+}
+
+.bar2 input[type=text],
+.bar2 #q {
+  flex: 1 1 220px
+}
+
+.bar2 .demo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 13px
+}
+
+.bar2 .demo input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ink)
+}
+
+/* hang tags */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
+  margin-top: 22px
+}
+
+.tag {
+  --k: var(--sell);
+  --on: #fff;
+  background: var(--paper);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: transform .18s, box-shadow .18s
+}
+
+.tag:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hi)
+}
+
+.tag.t-rent {
+  --k: var(--rent);
+  --on: var(--ink)
+}
+
+.tag.t-exchange {
+  --k: var(--swap)
+}
+
+.tag-top {
+  background: var(--k);
+  color: var(--on);
+  padding: 12px 54px 12px 16px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 0
+}
+
+.tag-top .kind {
+  font-weight: 600;
+  font-size: 14px
+}
+
+.tag-top .price {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 24px;
+  white-space: nowrap
+}
+
+.tag-top .price small {
+  font-size: 13px;
+  font-weight: 600
+}
+
+.hole {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--board);
+  box-shadow: inset 0 1px 3px #17203A40
+}
+
+.tag-body {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.tag-body h3 {
+  font-size: 20px;
+  font-weight: 700
+}
+
+.desc {
+  color: #39425A;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden
+}
+
+.meta {
+  color: var(--mute);
+  font-size: 13.5px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap
+}
+
+.av {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E4E9E1;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-grid;
+  place-items: center
+}
+
+.cat {
+  background: #EDF0EA;
+  border-radius: 6px;
+  padding: 1px 8px;
+  font-size: 12.5px;
+  color: #39425A
+}
+
+.star {
+  color: #C98A00
+}
+
+.facts {
+  display: flex;
+  gap: 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  flex-wrap: wrap
+}
+
+.facts .low {
+  color: var(--swap)
+}
+
+.tear {
+  border-top: 2px dashed #AEB6C8;
+  margin: 0 12px;
+  position: relative
+}
+
+.tear-foot {
+  padding: 12px 16px 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap
+}
+
+.tear-foot .pri {
+  flex: 1
+}
+
+/* surfaces */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  padding: 20px
+}
+
+.empty {
+  background: transparent;
+  border: 2px dashed #AEB6C8;
+  border-radius: 14px;
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--mute)
+}
+
+.empty b {
+  display: block;
+  font-family: var(--display);
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 4px
+}
+
+/* tables */
+.wrap {
+  overflow-x: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 16px
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 560px
+}
+
+th, td {
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle
+}
+
+th {
+  background: #F0F3EE;
+  font-weight: 600;
+  color: #4A5470;
+  white-space: nowrap;
+  font-size: 13px
+}
+
+tr:last-child td {
+  border-bottom: 0
+}
+
+tbody tr:hover td {
+  background: #F7F9F5
+}
+
+td.num, th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums
+}
+
+td.act {
+  text-align: right;
+  white-space: nowrap
+}
+
+td.act button {
+  margin-left: 4px
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #E6E9E2;
+  color: #39425A
+}
+
+.badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor
+}
+
+.approved, .completed, .paid, .resolved {
+  background: var(--ok-bg);
+  color: var(--ok)
+}
+
+.pending, .placed, .open {
+  background: var(--warn-bg);
+  color: var(--warn)
+}
+
+.rejected, .cancelled {
+  background: var(--err-bg);
+  color: var(--err)
+}
+
+/* kpis */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px
+}
+
+.kpi {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  padding: 18px 20px;
+  border-top: 4px solid var(--k, var(--ink))
+}
+
+.kpi b {
+  display: block;
+  font-family: var(--display);
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums
+}
+
+.kpi span {
+  color: var(--mute);
+  font-size: 14px
+}
+
+.kpi.a {
+  --k: var(--sell)
+}
+
+.kpi.b {
+  --k: var(--rent)
+}
+
+.kpi.c {
+  --k: var(--swap)
+}
+
+footer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px 36px;
+  color: var(--mute);
+  font-size: 13px
+}
+
+.stack {
+  position: relative;
+  height: 150px;
+  margin-top: 34px;
+  max-width: 520px
+}
+
+.mini {
+  position: absolute;
+  width: 200px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-hi);
+  overflow: hidden;
+  font-size: 13px
+}
+
+.mini div {
+  padding: 8px 14px;
+  font-weight: 700;
+  background: var(--k);
+  color: var(--on, #fff);
+  display: flex;
+  justify-content: space-between
+}
+
+.mini p {
+  padding: 10px 14px;
+  font-weight: 600
+}
+
+.mini.m1 {
+  --k: var(--sell);
+  left: 0;
+  top: 12px;
+  transform: rotate(-5deg)
+}
+
+.mini.m2 {
+  --k: var(--rent);
+  --on: var(--ink);
+  left: 150px;
+  top: 0;
+  transform: rotate(2deg)
+}
+
+.mini.m3 {
+  --k: var(--swap);
+  left: 300px;
+  top: 22px;
+  transform: rotate(7deg)
+}
+
+/* auth */
+.auth {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  min-height: 62vh
+}
+
+.auth .pitch h1 {
+  font-size: clamp(44px, 7vw, 84px);
+  font-weight: 800;
+  line-height: .95
+}
+
+.auth .pitch p {
+  font-size: 18px;
+  color: #39425A;
+  margin-top: 18px;
+  max-width: 30em
+}
+
+.kinds {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px
+}
+
+.kinds span {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  background: var(--k)
+}
+
+.kinds .a {
+  --k: var(--sell);
+  color: #fff
+}
+
+.kinds .b {
+  --k: var(--rent)
+}
+
+.kinds .c {
+  --k: var(--swap);
+  color: #fff
+}
+
+.demo-box {
+  margin-top: 26px;
+  font-size: 13.5px;
+  color: var(--mute);
+  max-width: 32em
+}
+
+.demo-box code {
+  background: #E3E8DF;
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: var(--ink)
+}
+
+.panel {
+  padding: 0;
+  overflow: hidden
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line)
+}
+
+.tabs button {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  background: #F0F3EE;
+  color: var(--mute);
+  padding: 14px;
+  font-size: 16px
+}
+
+.tabs button.on {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: inset 0 -3px 0 var(--rent)
+}
+
+.tabs button + button {
+  border-left: 1px solid var(--line)
+}
+
+.form {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px
+}
+
+.form input, .form select {
+  margin: 0;
+  width: 100%
+}
+
+.form .pri {
+  padding: 11px;
+  margin-top: 4px
+}
+
+/* modal */
+#modal {
+  position: fixed;
+  inset: 0;
+  background: #17203A99;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  padding: 16px
+}
+
+#modal .card {
+  box-shadow: 0 24px 60px -12px #17203A66;
+  width: 420px;
+  max-width: 100%;
+  max-height: 92vh;
+  overflow: auto;
+  animation: rise .2s ease-out
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.98)
+  }
+}
+
+#modal h3 {
+  font-size: 24px;
+  margin-bottom: 6px
+}
+
+#modal label {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--mute);
+  font-weight: 500
+}
+
+#modal input, #modal select {
+  width: 100%;
+  margin: 4px 0 0
+}
+
+#modal .btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px
+}
+
+#modal .btns .pri {
+  flex: 1
+}
+
+@media (max-width: 760px) {
+  .auth {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    min-height: 0
+  }
+
+  .head h2 {
+    font-size: 28px
+  }
+
+  nav .who {
+    margin-left: 0;
+    width: 100%
+  }
+
+  .bar {
+    padding: 12px 16px
+  }
+
+  main {
+    padding: 20px 16px 48px
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important
+  }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="bar">
+    <div class="brand"><i></i>Campus Remarket</div>
+    <nav id="nav" aria-label="Main"></nav>
+  </div>
+</header>
+
+<main>
+  <div id="msg" role="status"></div>
+  <div id="main"></div>
+</main>
+
+<footer>Campus Remarket · Student marketplace for buying, renting and exchanging</footer>
+<div id="modal"></div>
+
+<script>
+const $ = i => document.getElementById(i);
+let me = null, cache = [];
+
+const esc = v => v == null ? '' : String(v).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+
+let noteT;
+function note(t, e) {
+  const m = $('msg');
+  m.textContent = t;
+  m.className = e ? 'err' : 'ok';
+  m.setAttribute('role', e ? 'alert' : 'status');
+  clearTimeout(noteT);
+  if (!e) noteT = setTimeout(() => { m.textContent = '' }, 4500)
+}
+
+const LBL = {
+  order_id: 'Order',
+  product_id: 'Listing',
+  user_id: 'User',
+  complaint_id: 'Complaint',
+  category_id: 'ID',
+  listing_type: 'Type',
+  order_type: 'Type',
+  rent_days: 'Rent days',
+  total_amount: 'Total (Rs)',
+  quantity: 'Qty',
+  revenue: 'Revenue (Rs)',
+  price: 'Price (Rs)'
+};
+const NUM = new Set(['price', 'quantity', 'rent_days', 'total_amount', 'revenue', 'orders', 'units']);
+const lbl = c => LBL[c] || c[0].toUpperCase() + c.slice(1).replace(/_/g, ' ');
+
+const head = (t, s, r) => `<div class=head><div><h2>${t}</h2>${s ? `<p>${s}</p>` : ''}</div>${r || ''}</div>`;
+const empty = (a, b) => `<div class=empty><b>${a}</b>${b || ''}</div>`;
+
+async function api(m, u, b) {
+  const r = await fetch('/api' + u, {method: m, headers: {'Content-Type': 'application/json'}, body: b ? JSON.stringify(b) : undefined}).catch(() => { note('Server unreachable. Is the app running?', 1); throw 0 });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    if (u != '/me') note(j.error || 'Error ' + r.status, 1);
+    if (r.status == 401 && me) { me = null; auth() }
+    throw 0
+  }
+  return j
+}
+
+function tbl(rows, cols, act, none) {
+  if (!rows.length) return empty(none || 'Nothing here yet');
+  return '<div class=wrap><table><thead><tr>'
+    + cols.map(c => `<th class="${NUM.has(c) ? 'num' : ''}">${lbl(c)}</th>`).join('')
+    + (act ? '<th></th>' : '')
+    + '</tr></thead><tbody>'
+    + rows.map(r => '<tr>' + cols.map(c => `<td class="${NUM.has(c) ? 'num' : ''}">${c == 'status' ? `<span class="badge ${esc(r[c])}">${esc(r[c])}</span>` : esc(r[c])}</td>`).join('') + (act ? `<td class=act>${act(r)}</td>` : '') + '</tr>').join('')
+    + '</tbody></table></div>'
+}
+
+// modal form: fields {k,l,t,v,o}; resolves to values or null
+function ask(title, fields, ok = 'Submit') {
+  return new Promise(res => {
+    const m = $('modal');
+    m.style.display = 'flex';
+    m.innerHTML = `<div class=card role=dialog aria-modal=true aria-label="${esc(title)}"><h3>${title}</h3>`
+      + fields.map(f => `<label for=f_${f.k}>${f.l}</label>` + (f.o ? `<select id=f_${f.k}>${f.o.map(o => { const [v, l] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(v)}"${v == f.v ? ' selected' : ''}>${esc(l)}` }).join('')}</select>` : `<input id=f_${f.k} type=${f.t || 'text'} value="${esc(f.v)}">`)).join('')
+      + `<div class=btns><button class=pri id=fok>${ok}</button><button id=fno>Cancel</button></div></div>`;
+    const first = m.querySelector('input,select');
+    if (first) first.focus();
+    m.onclick = e => { if (e.target === m) $('fno').click() };
+    m.onkeydown = e => { if (e.key == 'Escape') $('fno').click() };
+
+    $('fno').onclick = () => { m.style.display = 'none'; res(null) };
+    $('fok').onclick = () => { const v = {}; fields.forEach(f => v[f.k] = $('f_' + f.k).value); m.style.display = 'none'; res(v) }
+  })
+}
+
+const TABS = {browse: 'Browse', orders: 'Orders', wishlist: 'Wishlist', complaints: 'Complaints', mine: 'My listings', report: 'My sales', admin: 'Admin'};
+
+function go(v) {
+  document.querySelectorAll('#nav .tab').forEach(b => b.classList.toggle('on', b.dataset.v == v));
+  window[v]()
+}
+
+function nav() {
+  const t = me.role == 'buyer' ? ['browse', 'orders', 'wishlist', 'complaints'] : me.role == 'seller' ? ['mine', 'orders', 'report'] : ['admin', 'orders', 'complaints'];
+  $('nav').innerHTML = t.map(v => `<button class=tab data-v=${v} onclick="go('${v}')">${TABS[v]}</button>`).join('') + `<div class=who><span><b>${esc(me.name)}</b></span><span class=role>${me.role}</span><button class=sm onclick="logout()">Log out</button></div>`;
+  go(t[0])
+}
+
+function auth() {
+  $('nav').innerHTML = '';
+  $('main').innerHTML = `<div class=auth><div class=pitch><h1>Pass it on.</h1><p>Buy, rent or swap textbooks, bikes, lab gear and dorm furniture with students on your campus.</p>
+<div class=kinds><span class=a>Buy</span><span class=b>Rent</span><span class=c>Exchange</span></div>
+<div class=stack aria-hidden=true><div class="mini m1"><div>For sale<span>Rs 450</span></div><p>Engineering maths</p></div><div class="mini m2"><div>For rent<span>Rs 60/day</span></div><p>Hybrid bicycle</p></div><div class="mini m3"><div>For exchange<span>Swap</span></div><p>Scientific calculator</p></div></div>
+<p class=demo-box>Trying the demo? Use <code>admin@campus.edu</code>, <code>seller@campus.edu</code> or <code>buyer@campus.edu</code> with password <code>pass123</code>.</p></div>
+<div class="card panel"><div class=tabs><button id=tl class=on onclick="tab('l')">Log in</button><button id=tr onclick="tab('r')">Register</button></div>
+<form class=form id=fl onsubmit="login();return false"><label>Email<input id=le type=email autocomplete=username></label><label>Password<input id=lp type=password autocomplete=current-password></label><button class=pri>Log in</button></form>
+<form class=form id=fr hidden onsubmit="reg();return false"><label>Name<input id=rn autocomplete=name></label><label>Email<input id=re type=email autocomplete=email></label><label>Password (6+ characters)<input id=rp type=password autocomplete=new-password></label><label>I want to<select id=rr><option value=buyer>Buy and rent<option value=seller>Sell and lend</select></label><button class=pri>Create account</button></form></div></div>`
+}
+
+function tab(k) {
+  const l = k == 'l';
+  $('fl').hidden = !l;
+  $('fr').hidden = l;
+  $('tl').classList.toggle('on', l);
+  $('tr').classList.toggle('on', !l)
+}
+
+async function login() {
+  me = await api('POST', '/login', {email: $('le').value, password: $('lp').value});
+  note('Welcome, ' + me.name);
+  nav()
+}
+
+async function reg() {
+  await api('POST', '/register', {name: $('rn').value, email: $('re').value, password: $('rp').value, role: $('rr').value});
+  note('Account created. Log in to continue.');
+  tab('l')
+}
+
+async function logout() {
+  await api('POST', '/logout');
+  me = null;
+  note('Logged out');
+  auth()
+}
+
+// ---- buyer ----
+async function browse() {
+  const cats = await api('GET', '/categories');
+  $('main').innerHTML = `<div class=hero><div class=hero-copy><h2>Find what you need from students on campus</h2><p>Buy, rent or swap textbooks, bikes, lab gear and dorm furniture.</p>
+<form onsubmit="load();return false"><input id=q type=search placeholder="Search items, e.g. calculator" aria-label="Search items"><button class=pri>Search</button></form></div></div>
+<div class=filters><div class=chips id=chips><button class="chip on" data-c="" onclick="pickC(this)">All</button>${cats.map(c => `<button class=chip data-c=${c.category_id} onclick="pickC(this)">${esc(c.name)}</button>`).join('')}</div>
+<div class=seg id=seg><button class=on data-t="" onclick="pickT(this)">All</button><button data-t=sell onclick="pickT(this)">Buy</button><button data-t=rent onclick="pickT(this)">Rent</button><button data-t=exchange onclick="pickT(this)">Exchange</button></div>
+<select id=s aria-label="Sort by" onchange=load()><option value="">Newest<option value=price_asc>Price: low to high<option value=price_desc>Price: high to low</select></div>
+<input type=hidden id=c value=""><input type=hidden id=t value="">
+<label class=demo><input type=checkbox id=f> Simulate failure (rollback demo)</label><p class=count id=count></p><div id=list></div>`;
+  load()
+}
+
+function pickC(b) {
+  $('c').value = b.dataset.c;
+  document.querySelectorAll('#chips .chip').forEach(x => x.classList.toggle('on', x == b));
+  load()
+}
+
+function pickT(b) {
+  $('t').value = b.dataset.t;
+  document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x == b));
+  load()
+}
+
+const KIND = {sell: 'For sale', rent: 'For rent', exchange: 'For exchange'};
+
+async function load() {
+  const r = await api('GET', `/products?q=${encodeURIComponent($('q').value)}&category=${$('c').value}&type=${$('t').value}&sort=${$('s').value}`);
+  $('count').textContent = r.length + (r.length == 1 ? ' listing' : ' listings');
+  $('list').innerHTML = r.length ? '<div class=grid>' + r.map(p => `<article class="tag t-${esc(p.listing_type)}"><i class=hole></i><div class=tag-top><span class=kind>${KIND[p.listing_type] || esc(p.listing_type)}</span><span class=price>Rs ${esc(p.price)}${p.listing_type == 'rent' ? '<small>/day</small>' : ''}</span></div><div class=tag-body><h3>${esc(p.title)}</h3><p class=desc>${esc(p.description)}</p><div class=facts><span class="${p.quantity <= 2 ? 'low' : ''}">${p.quantity <= 2 ? 'Only ' + p.quantity + ' left' : p.quantity + ' in stock'}</span><span>${p.rating ? '<span class=star>★</span> ' + esc(p.rating) : 'No reviews yet'}</span></div><p class=meta><span class=av>${esc((p.seller || '?')[0].toUpperCase())}</span>${esc(p.seller)}<span class=cat>${esc(p.category)}</span></p></div><div class=tear></div><div class=tear-foot><button class=pri onclick="buy(${p.product_id},'${p.listing_type}')">${{sell: 'Buy', rent: 'Rent', exchange: 'Exchange'}[p.listing_type]}</button><button onclick="wish(${p.product_id})">Add to wishlist</button></div></article>`).join('') + '</div>' : '<div style="margin-top:16px">' + empty('No listings match', 'Try a different search or clear the filters.') + '</div>'
+}
+
+async function buy(id, t) {
+  const f = [{k: 'quantity', l: 'Quantity', t: 'number', v: 1}];
+  if (t == 'rent') f.push({k: 'rentDays', l: 'Rental days', t: 'number', v: 3});
+  if (t == 'exchange') f.push({k: 'offeredItem', l: 'Item you offer in exchange'}); else f.push({k: 'method', l: 'Payment method', o: ['upi', 'card', 'cash']});
+  const v = await ask('Place order', f, 'Confirm order');
+  if (!v) return;
+  v.productId = id;
+  v.simulateFailure = $('f').checked;
+  const r = await api('POST', '/orders', v);
+  note('Order #' + r.orderId + ' placed. Total Rs ' + r.total);
+  load()
+}
+
+async function wish(id) {
+  await api('POST', '/wishlist/' + id);
+  note('Added to wishlist')
+}
+
+async function wishlist() {
+  const r = await api('GET', '/wishlist');
+  $('main').innerHTML = head('Wishlist', 'Listings you saved for later.') + tbl(r, ['title', 'listing_type', 'price', 'quantity'], p => `<button class='del sm' onclick=unwish(${p.product_id})>Remove</button>`, 'Your wishlist is empty. Save listings from Browse to find them here.')
+}
+
+async function unwish(id) {
+  if (!confirm('Remove from wishlist?')) return;
+  await api('DELETE', '/wishlist/' + id);
+  wishlist()
+}
+
+async function rev(pid) {
+  const v = await ask('Write a review', [{k: 'rating', l: 'Rating (1-5)', t: 'number', v: 5}, {k: 'comment', l: 'Comment'}]);
+  if (!v) return;
+  v.productId = pid;
+  await api('POST', '/reviews', v);
+  note('Review saved')
+}
+
+async function comp(oid) {
+  const v = await ask('Raise a complaint', [{k: 'description', l: 'Describe the issue'}]);
+  if (!v) return;
+  v.orderId = oid;
+  await api('POST', '/complaints', v);
+  note('Complaint submitted')
+}
+
+async function complaints() {
+  const r = await api('GET', '/complaints');
+  $('main').innerHTML = head('Complaints', me.role == 'admin' ? 'Open issues need a resolution.' : 'Issues you raised on your orders.') + tbl(r, ['complaint_id', 'order_id', 'description', 'status', 'resolution'], c => me.role == 'admin' && c.status == 'open' ? `<button class='pri sm' onclick=resolveC(${c.complaint_id})>Resolve</button>` : '', 'No complaints.')
+}
+
+async function resolveC(id) {
+  const v = await ask('Resolve complaint', [{k: 'resolution', l: 'Resolution'}]);
+  if (!v) return;
+  await api('POST', `/complaints/${id}/resolve`, v);
+  note('Complaint resolved');
+  complaints()
+}
+
+// ---- orders (scope enforced on server) ----
+async function orders() {
+  const r = await api('GET', '/orders');
+  $('main').innerHTML = head('Orders', me.role == 'seller' ? 'Orders placed on your listings.' : me.role == 'buyer' ? 'Your purchases, rentals and exchanges.' : 'All orders on campus.') + tbl(r, ['order_id', 'title', 'buyer', 'seller', 'order_type', 'quantity', 'rent_days', 'total_amount', 'method', 'status'], o =>
+    (me.role == 'seller' && o.status == 'placed' ? `<button class='pri sm' onclick=done(${o.order_id})>Mark completed</button>` : '') + (me.role == 'buyer' ? `<button class=sm onclick=rev(${o.product_id})>Review</button><button class=sm onclick=comp(${o.order_id})>Complain</button>` : ''), 'No orders yet.')
+}
+
+async function done(id) {
+  await api('POST', `/orders/${id}/complete`);
+  note('Order completed');
+  orders()
+}
+
+// ---- seller ----
+async function mine() {
+  const r = await api('GET', '/my/products');
+  cache = r;
+  $('main').innerHTML = head('My listings', 'New and edited listings go live after admin approval.', '<button class=pri onclick=addP()>New listing</button>') + tbl(r, ['product_id', 'title', 'listing_type', 'price', 'quantity', 'status'], p => `<button class=sm onclick=editP(${p.product_id})>Edit</button><button class='del sm' onclick=delP(${p.product_id})>Delete</button>`, 'You have no listings. Select New listing to post your first item.')
+}
+
+async function addP() {
+  const cats = await api('GET', '/categories');
+  const v = await ask('New listing', [{k: 'title', l: 'Title'}, {k: 'description', l: 'Description'}, {k: 'categoryId', l: 'Category', o: cats.map(c => [c.category_id, c.name])}, {k: 'listingType', l: 'Type', o: ['sell', 'rent', 'exchange']}, {k: 'price', l: 'Price (per day if rent)', t: 'number', v: 0}, {k: 'quantity', l: 'Quantity', t: 'number', v: 1}], 'Submit for approval');
+  if (!v) return;
+  await api('POST', '/products', v);
+  note('Listing submitted for admin approval');
+  mine()
+}
+
+async function editP(id) {
+  const p = cache.find(x => x.product_id == id);
+  const v = await ask('Edit listing', [{k: 'title', l: 'Title', v: p.title}, {k: 'price', l: 'Price', t: 'number', v: p.price}, {k: 'quantity', l: 'Quantity', t: 'number', v: p.quantity}], 'Save');
+  if (!v) return;
+  await api('PUT', '/products/' + id, v);
+  note('Updated (sent for re-approval)');
+  mine()
+}
+
+async function delP(id) {
+  if (!confirm('Delete this listing permanently?')) return;
+  await api('DELETE', '/products/' + id);
+  note('Listing deleted');
+  mine()
+}
+
+async function report() {
+  $('main').innerHTML = head('My sales', 'Completed orders and revenue.') + tbl(await api('GET', '/reports/sales'), ['seller', 'orders', 'revenue'], null, 'No sales yet.')
+}
+
+// ---- admin ----
+async function admin() {
+  const [p, s, c, cats, us] = await Promise.all([api('GET', '/admin/products'), api('GET', '/reports/sales'), api('GET', '/reports/categories'), api('GET', '/categories'), api('GET', '/admin/users')]);
+  const S = (t, s, r, body) => `<section class=blk>${head(t, s, r)}${body}</section>`;
+  const rev = s.reduce((a, x) => a + Number(x.revenue || 0), 0), ord = s.reduce((a, x) => a + Number(x.orders || 0), 0);
+  const K = (n, l, k) => `<div class="kpi ${k}"><b>${n}</b><span>${l}</span></div>`;
+  $('main').innerHTML = head('Admin', 'Approve listings, track sales and manage the marketplace.')
+    + `<div class=kpis>${K('Rs ' + rev.toLocaleString('en-IN'), 'Total revenue', 'a')}${K(ord, 'Orders completed', 'b')}${K(p.length, 'Listings awaiting approval', 'c')}${K(us.length, 'Registered users', '')}</div>`
+    + S('Pending listings', '', 0, tbl(p, ['product_id', 'title', 'seller', 'listing_type', 'price'], x => `<button class='pri sm' onclick="appr(${x.product_id},'approve')">Approve</button><button class='del sm' onclick="appr(${x.product_id},'reject')">Reject</button>`, 'No listings waiting for approval.'))
+    + S('Revenue per seller', '', 0, tbl(s, ['seller', 'orders', 'revenue'], null, 'No sales yet.'))
+    + S('Sales by category', '', 0, tbl(c, ['category', 'orders', 'units', 'revenue'], null, 'No sales yet.'))
+    + S('Categories', '', '<button class=pri onclick=addC()>Add category</button>', tbl(cats, ['category_id', 'name'], x => `<button class=sm onclick="renC(${x.category_id},'${esc(x.name).replace(/'/g, '')}')">Rename</button><button class='del sm' onclick=delC(${x.category_id})>Delete</button>`))
+    + S('Users', '', 0, tbl(us, ['user_id', 'name', 'email', 'role'], x => x.role == 'admin' ? '' : `<button class='del sm' onclick=delU(${x.user_id})>Delete</button>`))
+}
+
+async function appr(id, a) {
+  await api('POST', `/admin/products/${id}/${a}`);
+  note('Listing ' + a + 'd');
+  admin()
+}
+
+async function addC() {
+  const v = await ask('Add category', [{k: 'name', l: 'Name'}]);
+  if (!v) return;
+  await api('POST', '/admin/categories', v);
+  note('Category added');
+  admin()
+}
+
+async function renC(id, n) {
+  const v = await ask('Rename category', [{k: 'name', l: 'Name', v: n}]);
+  if (!v) return;
+  await api('PUT', '/admin/categories/' + id, v);
+  note('Category renamed');
+  admin()
+}
+
+async function delC(id) {
+  if (!confirm('Delete this category?')) return;
+  await api('DELETE', '/admin/categories/' + id);
+  note('Category deleted');
+  admin()
+}
+
+async function delU(id) {
+  if (!confirm('Delete this user permanently?')) return;
+  await api('DELETE', '/admin/users/' + id);
+  note('User deleted');
+  admin()
+}
+
+(async () => {
+  try { me = await api('GET', '/me') } catch (e) {}
+  me && me.role ? nav() : auth()
+})();
+</script>
+</body>
+</html>
